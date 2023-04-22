@@ -3,17 +3,17 @@ from mcstatus import JavaServer
 from librarian import OnlinePlayerRecord
 from datetime import datetime
 
-print("Looking up server")
-server = JavaServer.lookup("kibinibottom.minecra.fr")
+def record_ping(record, server):
+    timestamp = int(datetime.timestamp(datetime.now()))
+    status = server.status()
+    record.add_record(timestamp, status.players.sample)
 
-print("Looking up status")
-status = server.status()
+server = JavaServer.lookup("kibinibottom.minecra.fr")
 
 # server.players.online (#)
 # status.latency (ms)
 # status.players.sample -> [.name/.id, ...]
 
-record = OnlinePlayerRecord("log.dat", "online.dat", "uuid.dat")
-record.add_record(int(datetime.timestamp(datetime.now())), status.players.sample)
-
+record = OnlinePlayerRecord("record.json")
+record_ping(record, server)
 record.write()
