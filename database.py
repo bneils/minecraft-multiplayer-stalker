@@ -19,7 +19,7 @@ def add_row(database_file: str, timestamp: int, online_uuids: list):
     res = cur.execute("SELECT * FROM scans ORDER BY timestamp DESC LIMIT 1;")
     row = cur.fetchone()
     if row is not None:
-        last_online_uuids = row[-1]
+        last_online_uuids = eval(row[-1])
         last_uuids_set = set(last_online_uuids)
         now_uuids_set = set(online_uuids)
         left = list(last_uuids_set - now_uuids_set)
