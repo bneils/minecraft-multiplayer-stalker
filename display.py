@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import sqlite3
+import sys
 from datetime import datetime
 
 def secs_to_humanreadable(s):
@@ -19,8 +20,10 @@ def secs_to_humanreadable(s):
         msg.append("%d secs" % seconds)
     return ", ".join(msg)
 
+server_name = sys.argv[1]
+
 # Print individual intervals that each player was online, as well as the duration of the session
-con = sqlite3.connect("activity_monitor.db")
+con = sqlite3.connect(server_name + ".db")
 cur = con.cursor()
 
 res = cur.execute("SELECT * FROM scans")

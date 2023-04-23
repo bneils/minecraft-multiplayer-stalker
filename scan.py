@@ -10,7 +10,7 @@ server = JavaServer.lookup(server_name)
 while True:
     timestamp = int(datetime.timestamp(datetime.now()))
     status = server.status()
-    add_row("activity_monitor.db", timestamp, status.players.sample)
+    add_row(server_name + ".db", timestamp, status.players.sample)
 
     # Adaptive waits depending on the current likelihood that any
     # one player will get up and leave (or vice versa)
