@@ -2,5 +2,5 @@
 while :
 do
 	./oneshot.py
-	sleep 5s
+	sleep 2s
 done
