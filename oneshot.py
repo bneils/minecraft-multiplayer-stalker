@@ -6,8 +6,7 @@ from datetime import datetime
 def record_ping(server):
     timestamp = int(datetime.timestamp(datetime.now()))
     status = server.status()
-    player_uuids = [player.id for player in status.players.sample]
-    add_row("activity_monitor.db", timestamp, player_uuids)
+    add_row("activity_monitor.db", timestamp, status.players.sample)
 
 server = JavaServer.lookup("kibinibottom.minecra.fr")
 
