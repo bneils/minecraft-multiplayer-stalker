@@ -1,5 +1,4 @@
-
-# This module keeps track of server history
+# This module keeps track of server history and issues out SQL commands
 
 import sqlite3
 
