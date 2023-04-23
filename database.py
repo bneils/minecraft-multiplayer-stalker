@@ -11,20 +11,22 @@ def add_row(database_file: str, timestamp: int, online_uuids: list):
     cur.execute("""CREATE TABLE IF NOT EXISTS scans(
         timestamp INT,
         joined_uuids JSON DEFAULT('[]'),
-        left_uuids JSON DEFAULT('[]'))""")
+        left_uuids JSON DEFAULT('[]'));""")
 
-    # Get the last row, compare changes
-    res = cur.execute("SELECT * FROM scans ORDER BY timestamp DESC LIMIT 1;")
+    cur.execute("CREATE TABLE IF NOT EXISTS online(current JSON DEFAULT('[]'));")
+    res = cur.execute("SELECT current FROM online LIMIT 1;")
     row = cur.fetchone()
     if row is not None:
-        last_online_uuids = eval(row[-1])
+        last_online_uuids = eval(row[0])
         last_uuids_set = set(last_online_uuids)
         now_uuids_set = set(online_uuids)
         left = list(last_uuids_set - now_uuids_set)
         joined = list(now_uuids_set - last_uuids_set)
+        cur.execute("UPDATE online SET current = ?;", (repr(online_uuids),))
     else:
         left = []
         joined = online_uuids
+        cur.execute("INSERT INTO online(current) VALUES (?);", (repr(online_uuids),))
 
     # To save space, a row is only written if something has changed
     if not left and not joined:
