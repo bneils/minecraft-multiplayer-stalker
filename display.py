@@ -20,10 +20,14 @@ def secs_to_humanreadable(s):
         msg.append("%d secs" % seconds)
     return ", ".join(msg)
 
-server_name = sys.argv[1]
+server_file = sys.argv[1]
 
 # Print individual intervals that each player was online, as well as the duration of the session
-con = sqlite3.connect(server_name + ".db")
+try:
+    con = sqlite3.connect(f"file:{server_file}?mode=ro", uri=True)
+except sqlite3.OperationalError:
+    print("That db file doesn't exist")
+    exit()
 cur = con.cursor()
 
 res = cur.execute("SELECT * FROM scans")
