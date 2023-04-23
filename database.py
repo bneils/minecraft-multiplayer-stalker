@@ -11,7 +11,8 @@ def add_row(database_file: str, timestamp: int, online_players: list):
     cur.execute("""CREATE TABLE IF NOT EXISTS scans(
         timestamp INT,
         joined_uuids JSON DEFAULT('[]'),
-        left_uuids JSON DEFAULT('[]'));""")
+        left_uuids JSON DEFAULT('[]'),
+        number_online INT);""")
 
     cur.execute("CREATE TABLE IF NOT EXISTS online(current JSON DEFAULT('[]'));")
     res = cur.execute("SELECT current FROM online LIMIT 1;")
@@ -44,8 +45,8 @@ def add_row(database_file: str, timestamp: int, online_players: list):
         return
 
     # Insert a new row, keeping mark of timestamp
-    cur.execute("INSERT INTO scans(timestamp,joined_uuids,left_uuids) VALUES (?,?,?);",
-            (timestamp, repr(joined), repr(left)))
+    cur.execute("INSERT INTO scans(timestamp,joined_uuids,left_uuids,number_online) VALUES (?,?,?,?);",
+            (timestamp, repr(joined), repr(left), len(online_players)))
 
     con.commit()
     con.close()

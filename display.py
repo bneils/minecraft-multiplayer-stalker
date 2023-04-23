@@ -26,8 +26,8 @@ cur = con.cursor()
 res = cur.execute("SELECT * FROM scans")
 rows = []
 for row in res.fetchall():
-    timestamp, joined_uuids, left_uuids = row
-    rows.append((timestamp, eval(joined_uuids), eval(left_uuids)))
+    timestamp, joined_uuids, left_uuids, number_online = row
+    rows.append((timestamp, eval(joined_uuids), eval(left_uuids), number_online))
 
 res = cur.execute("SELECT * FROM uuids")
 uuids = {uuid:username for uuid, username in res.fetchall()}
@@ -52,3 +52,5 @@ for i in range(len(rows)):
             print(msg.ljust(72, " ") + "(%s)" % secs_to_humanreadable(duration))
 
 # Display number of people online, every time it changes, and what time it was
+for row in rows:
+    print(datetime.fromtimestamp(row[0]).strftime(date_format), row[3])
