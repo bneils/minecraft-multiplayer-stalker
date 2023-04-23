@@ -42,12 +42,13 @@ for i in range(len(rows)):
             if joined_player in rows[j][2]:
                 end = rows[j][0]
                 duration = end - start
-                print("%s was online from %s to %s for %s" %
-                        (username, datetime.fromtimestamp(start).strftime(date_format),
-                        datetime.fromtimestamp(end).strftime(date_format), secs_to_humanreadable(duration)))
+                msg = "%s was online from %s to %s (%s)" % (username, datetime.fromtimestamp(start).strftime(date_format),
+                        datetime.fromtimestamp(end).strftime(date_format), secs_to_humanreadable(duration))
+                print(msg)
                 break
         else:
-            print("%s has been online since %s" %
-                    (username, datetime.fromtimestamp(start).strftime(date_format)))
+            duration = datetime.timestamp(datetime.now()) - start
+            msg = "%s has been online since %s" % (username, datetime.fromtimestamp(start).strftime(date_format))
+            print(msg.ljust(72, " ") + "(%s)" % secs_to_humanreadable(duration))
 
 # Display number of people online, every time it changes, and what time it was
