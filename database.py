@@ -11,7 +11,7 @@ def add_row(database_file: str, timestamp: int, online_uuids: list):
     cur.execute("""CREATE TABLE IF NOT EXISTS scans(
         timestamp INT,
         joined_uuids JSON DEFAULT('[]'),
-        left_uuids JSON DEFAULT('[]')""")
+        left_uuids JSON DEFAULT('[]'))""")
 
     # Get the last row, compare changes
     res = cur.execute("SELECT * FROM scans ORDER BY timestamp DESC LIMIT 1;")
@@ -31,7 +31,7 @@ def add_row(database_file: str, timestamp: int, online_uuids: list):
         return
 
     # Insert a new row, keeping mark of timestamp
-    cur.execute("INSERT INTO scans(timestamp,joined_uuids,left_uuids) VALUES (?,?,?,?);",
+    cur.execute("INSERT INTO scans(timestamp,joined_uuids,left_uuids) VALUES (?,?,?);",
             (timestamp, repr(joined), repr(left)))
 
     con.commit()
