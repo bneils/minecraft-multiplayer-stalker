@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 from mcstatus import JavaServer
-from librarian import OnlinePlayerRecord
+from database import add_row
 from datetime import datetime
 
-def record_ping(record, server):
+def record_ping(server):
     timestamp = int(datetime.timestamp(datetime.now()))
     status = server.status()
-    record.add_record(timestamp, status.players.sample)
+    player_uuids = [player.id for player in status.players.sample]
+    add_row("activity_monitor.db", timestamp, player_uuids)
 
 server = JavaServer.lookup("kibinibottom.minecra.fr")
 
@@ -14,6 +15,4 @@ server = JavaServer.lookup("kibinibottom.minecra.fr")
 # status.latency (ms)
 # status.players.sample -> [.name/.id, ...]
 
-record = OnlinePlayerRecord("record.json")
-record_ping(record, server)
-record.write()
+record_ping(server)
